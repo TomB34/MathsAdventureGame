@@ -19,77 +19,35 @@ print(coList)
 for y in range(5):
     print(fullMap[y])
 
-#TODO: Randomise room types and place them randomly in map
 
+#Create array of random room types
 #0 = empty coord, 1 = start room, 2 = empty room, 3 = enemy room, 4 = loot room, 5 = boss room
 roomTypeList = [5]
 for x in range(random.randint(12, 20)):
-    roomTypeList.append(random.randint(2, 4))
+    roomTypeList.insert(0, random.randint(2, 4))
 
-print(roomTypeList)
+#Decide on room direction
+#1 = N, 2 = E, 3 = S, 4 = W
+roomDirection = 1
 
+#Pick random room from coList for new room to adjoin to
+adjRoom = coList[random.randint(0, len(coList) - 1)]
+print("adjRoom: " + str(adjRoom))
 
-#add 10 randomly placed rooms that are all connected (Represented by '2')
+#TODO: Check if adjoining room in directon is empty
+if roomDirection == 1:
+    emptyRoomFound = False
+    while emptyRoomFound == False:
+        if adjRoom[1] == 0:
+            roomToCheck = [adjRoom[0], adjRoom[1] + 4]
+        else:
+            roomToCheck = [adjRoom[0], adjRoom[1] - 1]
+        print("Room to check: " + str(roomToCheck))
+        fullMap[roomToCheck[1]][roomToCheck[0]] = 2
 
-#TODO: Turn adjRoom check into a function
-
-for roomsToAdd in range(len(roomTypeList)):
-    adjRoom = coList[random.randint(0, len(coList) - 1)] # Picks a random room from coList to have new room added to it
-    roomType = roomTypeList.pop()
-
-    if adjRoom == [0,0]:    # Checks if adjRoom is in a corner
-        roomDirection = random.choice([2,3])
-    elif adjRoom == [4,0]:
-        roomDirection = random.choice([3,4])
-    elif adjRoom == [4,4]:
-        roomDirection = random.choice([1,4])
-    elif adjRoom == [0, 4]:
-        roomDirection = random.choice([1,3])
-
-    elif adjRoom[1] == 0: # If room is at top edge, roomDirection cannot be '1' or 'North'
-        roomDirection = random.choice([2,3,4])
-    elif adjRoom[0] == 4: # If room is on right edge, roomDirection cannot be '2' or 'East'
-        roomDirection = random.choice([1,3,4])
-    elif adjRoom[1] == 4:
-        roomDirection = random.choice([1,2,4])
-    elif adjRoom[0] == 0:
-        roomDirection = random.choice([1,2,3])
-    else:
-        roomDirection = random.choice([1,2,3,4])
-    # print("adjRoom: " + str(adjRoom))
-    # print("Room direction: " + str(roomDirection))
-
-    #Check room to place coord is empty
-
-    #TODO: Function that checks next coords along direction until empty coord is found
-    isEmpty = False
-
-    if roomDirection == 1:
-        newRoom = [adjRoom[0], adjRoom[1] - 1]
-        while isEmpty == False:
-            if fullMap[newRoom[1]][newRoom[0]] == 0:
-                print("Empty")
-                fullMap[newRoom[1]][newRoom[0]] = roomType
-    elif roomDirection == 2:
-        newRoom = [adjRoom[0] + 1, adjRoom[1]]
-        if fullMap[newRoom[1]][newRoom[0]] == 0:
-            print("Empty")
-            fullMap[newRoom[1]][newRoom[0]] = roomType
-    elif roomDirection == 3:
-        newRoom = [adjRoom[0], adjRoom[1] + 1]
-        if fullMap[newRoom[1]][newRoom[0]] == 0:
-            print("Empty")
-            fullMap[newRoom[1]][newRoom[0]] = roomType
-    elif roomDirection == 4:
-        newRoom = [adjRoom[0] - 1, adjRoom[1]]
-        if fullMap[newRoom[1]][newRoom[0]] == 0:
-            print("Empty")
-            fullMap[newRoom[1]][newRoom[0]] = roomType
+    for y in range(5):
+        print(fullMap[y])
 
 
-    #Add new coord to coords list
-    coList.append(newRoom)
 
-for y in range(5):
-    print(fullMap[y])
 
