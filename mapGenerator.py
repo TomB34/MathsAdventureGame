@@ -20,120 +20,73 @@ for y in range(5):
     print(fullMap[y])
 
 
-#Create array of random room types
-#0 = empty coord, 1 = start room, 2 = empty room, 3 = enemy room, 4 = loot room, 5 = boss room
-roomTypeList = [5]
-for x in range(random.randint(12, 20)):
+#Create array of random room types || 0 = empty coord, 1 = start room, 2 = empty room, 3 = enemy room, 4 = loot room, 5 = boss room
+roomTypeList = []
+for x in range(random.randint(5, 10)):
     roomTypeList.insert(0, random.randint(2, 4))
 
 
+# Pick random room from coList for new room to adjoin to
+for i in range(len(roomTypeList)):
 
-#TODO: Check if adjoining room in directon is empty
-for rooms in range(5):
-    # Decide on room direction
-    # 1 = N, 2 = E, 3 = S, 4 = W
-    roomDirection = random.randint(1, 4)
+    roomFound = False
+    while roomFound == False:
+        adjRoom = coList[random.randint(0, len(coList) - 1)]
+        print("adjRoom: " + str(adjRoom))
+        roomToCheck = []
+        emptyRooms = []
 
-    # Pick random room from coList for new room to adjoin to
-    adjRoom = coList[random.randint(0, len(coList) - 1)]
-    print("adjRoom: " + str(adjRoom))
+        #TODO: check all directions for empty room. Add empty rooms to a list
 
-
-    if roomDirection == 1:  #If direction is north
-        emptyRoomFound = False  #Set to False
-
-        if adjRoom[1] == 0: #If Y coordinate is 0 - At the top of map
-            roomToCheck = [adjRoom[0], adjRoom[1] + 4]  #Mirror new room to bottom of map
+        # Check North
+        if adjRoom[1] == 0:
+            roomToCheck = [adjRoom[0], adjRoom[1] + 4]
         else:
-            roomToCheck = [adjRoom[0], adjRoom[1] - 1]  #Otherwise go up one for new room
-        print("Room to check!!!: " + str(roomToCheck))
+            roomToCheck = [adjRoom[0], adjRoom[1] - 1]
 
-        #While loop will check for new empty room if first room doesn't work
-        while emptyRoomFound == False:  #While empty room hasn't been found
-            if fullMap[roomToCheck[1]][roomToCheck[0]] == 0:    #If roomToCheck coords are empty
-                fullMap[roomToCheck[1]][roomToCheck[0]] = 2     #Set room to value of 2
-                emptyRoomFound = True   #Empty room found, set to True
-                print("Empty room found!")
-            elif fullMap[roomToCheck[1]][roomToCheck[0]] != 0:  #If roomToCheck is taken
-                if roomToCheck[1] == 0: #If room that was checked is on top edge...
-                    roomToCheck = [roomToCheck[0], roomToCheck[1] + 4]  #Mirror new roomToCheck
-                    print("Room to check?: " + str(roomToCheck))
-                elif roomToCheck[1] != 0:
-                    roomToCheck = [roomToCheck[0], roomToCheck[1] - 1]  #Otherwise move new roomToCheck up
-                    print("Room to check!: " + str(roomToCheck))
+        if fullMap[roomToCheck[1]][roomToCheck[0]] == 0:
+            emptyRooms.append(roomToCheck)
 
-    if roomDirection == 2:
-        emptyRoomFound = False  # Set to False
-
-        if adjRoom[0] == 4:  # If X coordinate is 4 - Right edge of map
-            roomToCheck = [adjRoom[0] - 4, adjRoom[1]]  # Mirror new room to left of map
+        # Check East
+        if adjRoom[0] == 4:
+            roomToCheck = [adjRoom[0] - 4, adjRoom[1]]
         else:
-            roomToCheck = [adjRoom[0] + 1, adjRoom[1]]  # Otherwise go right one for new room
-        print("Room to check!!!: " + str(roomToCheck))
+            roomToCheck = [adjRoom[0] + 1, adjRoom[1]]
+        if fullMap[roomToCheck[1]][roomToCheck[0]] == 0:
+            emptyRooms.append(roomToCheck)
 
-        # While loop will check for new empty room if first room is full
-        while emptyRoomFound == False:  # While empty room hasn't been found
-            if fullMap[roomToCheck[1]][roomToCheck[0]] == 0:  # If roomToCheck coords are empty
-                fullMap[roomToCheck[1]][roomToCheck[0]] = 2  # Set room to value of 2
-                emptyRoomFound = True  # Empty room found, set to True
-                print("Empty room found!")
-            elif fullMap[roomToCheck[1]][roomToCheck[0]] != 0:  # If roomToCheck is taken
-                if roomToCheck[0] == 4:  # If room that was checked is on right edge...
-                    roomToCheck = [roomToCheck[0] - 4, roomToCheck[1]]  # Mirror new roomToCheck
-                    print("Room to check?: " + str(roomToCheck))
-                elif roomToCheck[0] != 4:
-                    roomToCheck = [roomToCheck[0] + 1, roomToCheck[1]]  # Otherwise move new roomToCheck to right
-                    print("Room to check!: " + str(roomToCheck))
-
-    if roomDirection == 3:
-        emptyRoomFound = False  # Set to False
-
-        if adjRoom[1] == 4:  # If Y coordinate is 4 - At the bottom of map
-            roomToCheck = [adjRoom[0], adjRoom[1] - 4]  # Mirror new room to top of map
+        # Check South
+        if adjRoom[1] == 4:
+            roomToCheck = [adjRoom[0], adjRoom[1] - 4]
         else:
-            roomToCheck = [adjRoom[0], adjRoom[1] + 1]  # Otherwise go down one for new room
-        print("Room to check!!!: " + str(roomToCheck))
+            roomToCheck = [adjRoom[0], adjRoom[1] + 1]
+        if fullMap[roomToCheck[1]][roomToCheck[0]] == 0:
+            emptyRooms.append(roomToCheck)
 
-        # While loop will check for new empty room if first room doesn't work
-        while emptyRoomFound == False:  # While empty room hasn't been found
-            if fullMap[roomToCheck[1]][roomToCheck[0]] == 0:  # If roomToCheck coords are empty
-                fullMap[roomToCheck[1]][roomToCheck[0]] = 2  # Set room to value of 2
-                emptyRoomFound = True  # Empty room found, set to True
-                print("Empty room found!")
-            elif fullMap[roomToCheck[1]][roomToCheck[0]] != 0:  # If roomToCheck is taken
-                if roomToCheck[1] == 4:  # If room that was checked is on bottom edge...
-                    roomToCheck = [roomToCheck[0], roomToCheck[1] - 4]  # Mirror new roomToCheck
-                    print("Room to check?: " + str(roomToCheck))
-                elif roomToCheck[1] != 4:
-                    roomToCheck = [roomToCheck[0], roomToCheck[1] + 1]  # Otherwise move new roomToCheck down
-                    print("Room to check!: " + str(roomToCheck))
-
-    if roomDirection == 4:
-        emptyRoomFound = False  # Set to False
-
-        if adjRoom[0] == 0:  # If X coordinate is 0 - Left edge of map
-            roomToCheck = [adjRoom[0] + 4, adjRoom[1]]  # Mirror new room to right of map
+        # Check West
+        if adjRoom[0] == 0:
+            roomToCheck = [adjRoom[0] + 4, adjRoom[1]]
         else:
-            roomToCheck = [adjRoom[0] - 1, adjRoom[1]]  # Otherwise go left one for new room
-        print("Room to check!!!: " + str(roomToCheck))
+            roomToCheck = [adjRoom[0] -1, adjRoom[1]]
+        if fullMap[roomToCheck[1]][roomToCheck[0]] == 0:
+            emptyRooms.append(roomToCheck)
 
-        # While loop will check for new empty room if first room is full
-        while emptyRoomFound == False:  # While empty room hasn't been found
-            if fullMap[roomToCheck[1]][roomToCheck[0]] == 0:  # If roomToCheck coords are empty
-                fullMap[roomToCheck[1]][roomToCheck[0]] = 2  # Set room to value of 2
-                emptyRoomFound = True  # Empty room found, set to True
-                print("Empty room found!")
-            elif fullMap[roomToCheck[1]][roomToCheck[0]] != 0:  # If roomToCheck is taken
-                if roomToCheck[0] == 0:  # If room that was checked is on left edge...
-                    roomToCheck = [roomToCheck[0] + 4, roomToCheck[1]]  # Mirror new roomToCheck
-                    print("Room to check?: " + str(roomToCheck))
-                elif roomToCheck[0] != 4:
-                    roomToCheck = [roomToCheck[0] - 1, roomToCheck[1]]  # Otherwise move new roomToCheck to left
-                    print("Room to check!: " + str(roomToCheck))
+        # If no rooms are found, change adjRoom
+        if emptyRooms == []:
+            adjRoom = coList[random.randint(0, len(coList) - 1)]
+        else:
+            roomFound = True
 
+            print("Empty rooms to pick from: " + str(emptyRooms))
 
-for y in range(5):
-    print(fullMap[y])
+            #TODO: pick a room at random to fill. Add to coList.
+            roomToFill = random.choice(emptyRooms)
+            coList.append(roomToFill)
+            fullMap[roomToFill[1]][roomToFill[0]] = roomTypeList.pop()
+            print("List of full rooms: " + str(coList) + "\n")
+
+        for y in range(5):
+            print(fullMap[y])
 
 
 
