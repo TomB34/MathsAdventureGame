@@ -2,6 +2,7 @@ RANDOM MAP GENERATIONS
 - 5x5 2D array is created
 - Random coord is set to '1' - Start room
 - First room is selected. All directions are checked and added to list and one is chosen at random to fill. Repeat x times.
+- Condense code into functions where possible. Move to new file
 
 START MENU
 
