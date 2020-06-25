@@ -1,6 +1,5 @@
 import random
 
-#Function for checking all four sides of a room to see if they are empty.
 def checkSides(fullMapList, adjRoomCoords):   #Takes full map, adjRoom coords
     emptyRooms = []
     # Check North
@@ -39,7 +38,9 @@ def checkSides(fullMapList, adjRoomCoords):   #Takes full map, adjRoom coords
     return emptyRooms
     # Returns a list of empty rooms that are available to be used
 
-#-----------------------------------------------------------------------------------------------------
+def printMap(fullMaplist):
+    for y in range(5):
+        print(fullMaplist[y])
 
 #create a blank 5x5 2d array
 fullMap = []
@@ -99,7 +100,6 @@ while bossRoomFound == False:
         coList.append(roomToFill)
         fullMap[roomToFill[1]][roomToFill[0]] = 5
 
-for y in range(5):
-    print(fullMap[y])
+
 
 
