@@ -39,15 +39,21 @@ def checkSides(fullMapList, adjRoomCoords):   #Takes full map, adjRoom coords
     # Returns a list of empty rooms that are available to be used
 
 def printMap(fullMaplist):
+    print("X is the room you are in. - are rooms you have been in. 0 are undiscovered places.")
     for y in range(5):
-        print(fullMaplist[y])
+        for x in range(5):
+            print(str(fullMaplist[y][x]) + " ", end='')
+        print()
 
 #create a blank 5x5 2d array
 fullMap = []
+userMap = []
 for y in range(5):
     fullMap.append([])
+    userMap.append([])
     for x in range(5):
         fullMap[y].append(0)
+        userMap[y].append(0)
 
 #Pick a random starting point (represented by '1')
 
@@ -57,6 +63,7 @@ coList = []
 startRoom = [random.randint(0, 4), random.randint(0, 4)]
 coList.append(startRoom)
 fullMap[coList[0][1]][coList[0][0]] = 1
+userMap[coList[0][1]][coList[0][0]] = 'X'
 
 #Create array of random room types
 # 0 = empty coord, 1 = start room, 2 = empty room, 3 = enemy room, 4 = loot room, 5 = boss room
@@ -84,7 +91,7 @@ for i in range(len(roomTypeList)):
                 fullMap[roomToFill[1]][roomToFill[0]] = roomTypeList.pop()
                 #print("List of full rooms: " + str(coList) + "\n")
 
-#TODO: Add boss room, not adjacent to start room
+#Add boss room, not adjacent to start room
 bossRoomFound = False
 while bossRoomFound == False:
     adjRoom = coList[random.randint(1, len(coList) - 1)]    #Start at index 1 to miss out start room
