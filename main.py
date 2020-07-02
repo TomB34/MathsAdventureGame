@@ -42,7 +42,7 @@ def doorAmount(fullMap, currentRoom):
 
     return doors
 
-def printDoors(doors):
+def doorChoices(doors):
     userChoices = []
     for i in range(4):
         if doors[i] != None and i == 0:
@@ -62,62 +62,71 @@ def defaultChoices(userChoicesList):
 
 #------------------------------------------------------------------------------------------------
 
-#TODO: Set Current room
+#Set Current room
 currentRoom = mapGen.startRoom
 fullMap = mapGen.fullMap
 userMap = mapGen.userMap
-print(currentRoom)
 
-#TODO: Find out movement options for user
+#Find out movement options for user
 doorList = doorAmount(fullMap, currentRoom)
-print(doorList)
-mapGen.printMap(userMap)
+
+#Player's Inventory
+inventory = {'Dagger/s': 1, 'Gold Coin/s': 3, 'key/s': 1}
 
 #TODO: List options for User
 playing = True
 while playing:
-    userChoices = printDoors(doorList)
-    userChoices.append('Exit')
-    response = pyip.inputMenu(choices=userChoices, numbered=True)
+
+    userChoices = doorChoices(doorList)
+    defaultChoices(userChoices)
+
+    #TODO: Add room description
+    
+
+    #TODO: Add door description
+
+    prompt = 'What would you like to do?\n'
+    for i in range(len(userChoices)):
+        prompt += f'{str(i + 1)}. {userChoices[i]}\n'
+
+    response = pyip.inputMenu(choices=userChoices, numbered=True, prompt=prompt)
+
     if response == 'Go forward':
         userMap[currentRoom[1]][currentRoom[0]] = '-'
         currentRoom = [doorList[0][0], doorList[0][1]]
-        print(currentRoom)
         userMap[currentRoom[1]][currentRoom[0]] = 'X'
         doorList = doorAmount(fullMap, currentRoom)
-        mapGen.printMap(userMap)
 
     if response == 'Go right':
         userMap[currentRoom[1]][currentRoom[0]] = '-'
         currentRoom = [doorList[1][0], doorList[1][1]]
-        print(currentRoom)
         userMap[currentRoom[1]][currentRoom[0]] = 'X'
         doorList = doorAmount(fullMap, currentRoom)
-        mapGen.printMap(userMap)
 
     if response == 'Go back':
         userMap[currentRoom[1]][currentRoom[0]] = '-'
         currentRoom = [doorList[2][0], doorList[2][1]]
-        print(currentRoom)
         userMap[currentRoom[1]][currentRoom[0]] = 'X'
         doorList = doorAmount(fullMap, currentRoom)
-        mapGen.printMap(userMap)
 
     if response == 'Go left':
         userMap[currentRoom[1]][currentRoom[0]] = '-'
         currentRoom = [doorList[3][0], doorList[3][1]]
-        print(currentRoom)
         userMap[currentRoom[1]][currentRoom[0]] = 'X'
         doorList = doorAmount(fullMap, currentRoom)
+
+    if response == 'Inventory':
+        for k, v in enumerate(inventory):
+            print(f'{v}: {k}')
+
+    if response == 'Check map':
         mapGen.printMap(userMap)
 
-    if response == 'Exit':
+    if response == 'Quit':
         sys.exit()
 
 
-#TODO: Set current room to user-chosen room
 
-#TODO: Put in loop to repeat
 
 
 

@@ -22,6 +22,11 @@ ROOM MOVEMENT PLANNING
 - Set current to new room specified by user
 - Repeat first step
 
+ROOM DESCRIPTION
+- Current room is described based on type of room
+- Amount of doors described if not an enemy or boss room
+- Chests described if loot room
+- Empty room described, random string pulled from array
 
 
 
