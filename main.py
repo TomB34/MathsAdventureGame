@@ -1,6 +1,6 @@
 import mapGenerator as mapGen
 import pyinputplus as pyip
-import sys
+import sys, roomDesc
 
 def doorAmount(fullMap, currentRoom):
     doors = []
@@ -60,6 +60,8 @@ def defaultChoices(userChoicesList):
     userChoicesList.append('Check map')
     userChoicesList.append('Quit')
 
+
+
 #------------------------------------------------------------------------------------------------
 
 #Set Current room
@@ -75,15 +77,27 @@ inventory = {'Dagger/s': 1, 'Gold Coin/s': 3, 'key/s': 1}
 
 #TODO: List options for User
 playing = True
+isStart = True
 while playing:
 
-    userChoices = doorChoices(doorList)
+    # Prints a description of the room
+    if isStart == True:
+        print("You wake up in a damp and dimly lit room. A single flickering candle throws up shadows on the four grey stone walls.")
+        isStart = False
+        roomType = 1
+    else:
+        roomType = roomDesc.roomDesc(currentRoom, mapGen.fullMap)
+        print(roomType)
+    #take current room and mapGen.fullMap. See what value fills current room and print appropriately
+
+    if roomType == 1 or roomType == 2 or roomType == 4:
+        userChoices = doorChoices(doorList)
+    elif roomType == 3:
+        userChoices = doorChoices(doorList)
+    elif roomType == 5:
+        userChoices = doorChoices(doorList)
+
     defaultChoices(userChoices)
-
-    #TODO: Add room description
-    
-
-    #TODO: Add door description
 
     prompt = 'What would you like to do?\n'
     for i in range(len(userChoices)):
