@@ -3,7 +3,7 @@ import random
 def roomDesc (currentRoom, fullMap):
     roomType = fullMap[currentRoom[1]][currentRoom[0]]
     if roomType == 1:
-        print("You find yourself back in the room you woke up in")
+        print("You find yourself in the room that you woke up in")
     if roomType == 2:
         emptyRoomLines = ["An empty room, not much to see here",
                           "Not much to look at here",
@@ -18,6 +18,8 @@ def roomDesc (currentRoom, fullMap):
     if roomType == 5:
         print("A huge three-eyed monster stands before you, looking a lot tougher and hungrier than the previous foes you have faced")
         #Call boss function here
+    if roomType == 8:
+        print("An opened and empty chest sits in the middle of the room")
 
     return roomType
 
