@@ -1,4 +1,4 @@
-import random
+import random, enemyCombat
 
 def roomDesc (currentRoom, fullMap):
     roomType = fullMap[currentRoom[1]][currentRoom[0]]
@@ -9,8 +9,8 @@ def roomDesc (currentRoom, fullMap):
                           "Not much to look at here",
                           "Nothing exciting here"]
         print(emptyRoomLines[random.randint(0, len(emptyRoomLines) - 1)])
-    if roomType == 3:
-        print("A creature stands before you, preventing you from getting out.")
+    if roomType == 3 or roomType == 6:
+        print(f"A creature stands before you, preventing you from getting out.")
         #Call enemy fight function here in new module
     if roomType == 4:
         print("A chest sits in the middle of the room")

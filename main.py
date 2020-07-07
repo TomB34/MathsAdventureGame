@@ -4,7 +4,7 @@ import sys
 import mapGenerator as mapGen
 import directionChoices as dirCho
 import character as char
-import roomDesc, chestFuncs
+import roomDesc, chestFuncs, enemyCombat
 
 def defaultChoices(userChoicesList):
     userChoicesList.append('Check stats')
@@ -33,16 +33,22 @@ while playing:
     else:
         roomType = roomDesc.roomDesc(currentRoom, mapGen.fullMap)
     #take current room and mapGen.fullMap. See what value fills current room and print appropriately
-
+    userChoices = []
     if roomType == 1 or roomType == 2 or roomType == 8:
         userChoices = dirCho.doorChoices(doorList)
-    elif roomType == 3:
-        userChoices = dirCho.doorChoices(doorList)
-    elif roomType == 4:
+
+    elif roomType == 3: #Enemy room upon first entry
+        enemyCombat.combatChoices(userChoices)
+        enemyCombat.initEnemy(enemyCombat.enemyStats)
+        mapGen.fullMap[currentRoom[1]][currentRoom[0]] = 6
+    elif roomType == 6: #Enemy room after first entry
+        enemyCombat.combatChoices(userChoices)
+    elif roomType == 4: #Chest room
         userChoices = dirCho.doorChoices(doorList)
         userChoices.append('Open chest')
     elif roomType == 5:
         userChoices = dirCho.doorChoices(doorList)
+
 
     defaultChoices(userChoices)
 
@@ -52,6 +58,7 @@ while playing:
 
     response = pyip.inputMenu(choices=userChoices, numbered=True, prompt=prompt)
 
+    # Travel functions
     if response == 'Go forward':
         mapGen.userMap[currentRoom[1]][currentRoom[0]] = '-'
         currentRoom = [doorList[0][0], doorList[0][1]]
@@ -76,10 +83,16 @@ while playing:
         mapGen.userMap[currentRoom[1]][currentRoom[0]] = 'X'
         doorList = dirCho.doorAmount(mapGen.fullMap, currentRoom)
 
+    # Chest room functions
     if response == 'Open chest':
         chestFuncs.openChest(char.inventory, char.charStats)
         mapGen.fullMap[currentRoom[1]][currentRoom[0]] = 8
 
+    # Enemy combat functions
+    if response == 'Stab':
+        enemyCombat.userStab()
+
+    # Default functions
     if response == 'Check stats':
         for k, v in char.charStats.items():
             print(f'{k}: {v}')
@@ -87,7 +100,6 @@ while playing:
     if response == 'Check pockets':
         for k, v in char.inventory.items():
             print(f'{k}: {v}')
-
 
     if response == 'Check map':
         mapGen.printMap(mapGen.userMap)
