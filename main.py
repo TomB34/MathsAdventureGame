@@ -41,6 +41,7 @@ while playing:
         enemyCombat.combatChoices(userChoices)
         enemyCombat.initEnemy(enemyCombat.enemyStats)
         mapGen.fullMap[currentRoom[1]][currentRoom[0]] = 6
+        print(enemyCombat.enemyStats)
     elif roomType == 6: #Enemy room after first entry
         enemyCombat.combatChoices(userChoices)
     elif roomType == 4: #Chest room
@@ -90,8 +91,10 @@ while playing:
 
     # Enemy combat functions
     if response == 'Stab':
-        enemyCombat.userStab()
-
+        stabResults = enemyCombat.userStab(char.charStats['Health'], char.charStats['Attack'], enemyCombat.enemyStats['Health'], enemyCombat.enemyStats['Defence'])
+        char.charStats['Health'] = stabResults[0]
+        enemyCombat.enemyStats['Health'] = stabResults[1]
+        print(enemyCombat.enemyStats)
     # Default functions
     if response == 'Check stats':
         for k, v in char.charStats.items():
