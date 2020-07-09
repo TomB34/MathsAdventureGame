@@ -12,6 +12,8 @@ def roomDesc (currentRoom, fullMap):
     if roomType == 3 or roomType == 6:
         print(f"A creature stands before you, preventing you from getting out.")
         #Call enemy fight function here in new module
+    if roomType == 7:
+        print("A slain foe lays in the middle of the room.")
     if roomType == 4:
         print("A chest sits in the middle of the room")
         #Call loot function here

@@ -32,6 +32,7 @@ while playing:
         roomType = 1
     else:
         roomType = roomDesc.roomDesc(currentRoom, mapGen.fullMap)
+
     #take current room and mapGen.fullMap. See what value fills current room and print appropriately
     userChoices = []
     if roomType == 1 or roomType == 2 or roomType == 8:
@@ -41,9 +42,12 @@ while playing:
         enemyCombat.combatChoices(userChoices)
         enemyCombat.initEnemy(enemyCombat.enemyStats)
         mapGen.fullMap[currentRoom[1]][currentRoom[0]] = 6
-        print(enemyCombat.enemyStats)
+        print(f"Enemy Health: {enemyCombat.enemyStats['Health']}")
     elif roomType == 6: #Enemy room after first entry
         enemyCombat.combatChoices(userChoices)
+        print(f"Enemy Health: {enemyCombat.enemyStats['Health']}")
+    elif roomType == 7: # Defeated enemy room
+        userChoices = dirCho.doorChoices(doorList)
     elif roomType == 4: #Chest room
         userChoices = dirCho.doorChoices(doorList)
         userChoices.append('Open chest')
@@ -92,9 +96,41 @@ while playing:
     # Enemy combat functions
     if response == 'Stab':
         stabResults = enemyCombat.userStab(char.charStats['Health'], char.charStats['Attack'], enemyCombat.enemyStats['Health'], enemyCombat.enemyStats['Defence'])
-        char.charStats['Health'] = stabResults[0]
-        enemyCombat.enemyStats['Health'] = stabResults[1]
-        print(enemyCombat.enemyStats)
+        if stabResults[0] <= 0:
+            print('You died, game over!')
+            sys.exit()
+        if stabResults[1] <= 0:
+            print('You killed the creature!')
+            mapGen.fullMap[currentRoom[1]][currentRoom[0]] = 7
+            char.charStats['Health'] = stabResults[0]
+        else:
+            char.charStats['Health'] = stabResults[0]
+            enemyCombat.enemyStats['Health'] = stabResults[1]
+            print(f"Enemy Health: {enemyCombat.enemyStats['Health']}")
+
+    if response == 'Swipe':
+        swipeResults = enemyCombat.userSwipe(char.charStats['Health'], char.charStats['Attack'], enemyCombat.enemyStats['Health'], enemyCombat.enemyStats['Defence'])
+        if swipeResults[0] <= 0:
+            print('You died, game over!')
+            sys.exit()
+        if swipeResults[1] <= 0:
+            print('You killed the creature!')
+            mapGen.fullMap[currentRoom[1]][currentRoom[0]] = 7
+            char.charStats['Health'] = swipeResults[0]
+        else:
+            char.charStats['Health'] = swipeResults[0]
+            enemyCombat.enemyStats['Health'] = swipeResults[1]
+            print(f"Enemy Health: {enemyCombat.enemyStats['Health']}")
+
+    if response == 'Block':
+        blockResults = enemyCombat.userBlock(char.charStats['Health'], char.charStats['Defence'], enemyCombat.enemyStats['Attack'])
+        if blockResults <= 0:
+            print('You died, game over!')
+            sys.exit()
+        else:
+            char.charStats['Health'] = blockResults
+            print(f"Enemy Health: {enemyCombat.enemyStats['Health']}")
+
     # Default functions
     if response == 'Check stats':
         for k, v in char.charStats.items():
