@@ -77,6 +77,17 @@ def userBlock(userHealth, userDefence, enemyAttack):
 
     return userHealth
 
+def enemyDrop(userInv, enemyCount):
+    if enemyCount == 1 and userInv['Keys'] == 0:
+        userInv['Keys'] = 1
+        print('The enemy drops a key!')
+    elif random.randint(0, 1) == 1 and userInv['Keys'] == 0:
+        userInv['Keys'] = 1
+        print('The enemy drops a key!')
+
+
+
+
 enemyStats = {
     'Health': 0,
     'Attack': 0,

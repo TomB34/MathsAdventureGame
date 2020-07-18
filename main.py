@@ -101,6 +101,8 @@ while playing:
             sys.exit()
         if stabResults[1] <= 0:
             print('You killed the creature!')
+            enemyCombat.enemyDrop(char.inventory, mapGen.enemyCount)
+            mapGen.enemyCount -= 1
             mapGen.fullMap[currentRoom[1]][currentRoom[0]] = 7
             char.charStats['Health'] = stabResults[0]
         else:
@@ -115,6 +117,8 @@ while playing:
             sys.exit()
         if swipeResults[1] <= 0:
             print('You killed the creature!')
+            enemyCombat.enemyDrop(char.inventory, mapGen.enemyCount)
+            mapGen.enemyCount -= 1
             mapGen.fullMap[currentRoom[1]][currentRoom[0]] = 7
             char.charStats['Health'] = swipeResults[0]
         else:
@@ -145,19 +149,3 @@ while playing:
 
     if response == 'Quit':
         sys.exit()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -71,6 +71,11 @@ roomTypeList = [3, 4]
 for x in range(random.randint(5, 7)):
     roomTypeList.append(random.randint(2, 4))
 
+enemyCount = 0
+for i in range(len(roomTypeList)):
+    if roomTypeList[i] == 3:
+        enemyCount += 1
+
 # Pick random room from coList for new room to adjoin to
 for i in range(len(roomTypeList)):
     roomFound = False
