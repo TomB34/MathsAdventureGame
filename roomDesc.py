@@ -11,7 +11,7 @@ def roomDesc (currentRoom, fullMap):
         print(emptyRoomLines[random.randint(0, len(emptyRoomLines) - 1)])
     if roomType == 3 or roomType == 6:
         print(f"A creature stands before you, preventing you from getting out.")
-        #Call enemy fight function here in new module
+        print(f"The only way to escape is to fight. Are you ready?")
     if roomType == 7:
         print("A slain foe lays in the middle of the room.")
     if roomType == 4:

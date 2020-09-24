@@ -1,16 +1,18 @@
 import pyinputplus as pyip
-import sys
+import sys, time
 
 import mapGenerator as mapGen
 import directionChoices as dirCho
 import character as char
 import roomDesc, chestFuncs, enemyCombat
 
+
 def defaultChoices(userChoicesList):
     userChoicesList.append('Check stats')
     userChoicesList.append('Check pockets')
     userChoicesList.append('Check map')
     userChoicesList.append('Quit')
+
 
 # ------------------------------------------------------------------------------------------------
 
@@ -27,7 +29,8 @@ while playing:
 
     # Prints a specific sentence when the game is started
     if isStart:
-        print("You wake up in a damp and dimly lit room. A single flickering candle throws up shadows on the four grey stone walls.")
+        print(
+            "You wake up in a damp and dimly lit room. A single flickering candle throws up shadows on the four grey stone walls.")
         isStart = False
         roomType = 1
     else:
@@ -66,7 +69,7 @@ while playing:
     # Travel functions
     if response == 'Go forward':
         # check for boss room
-        if mapGen.fullMap[doorList[0][0]][doorList[0][1]] == 5:
+        if mapGen.fullMap[doorList[0][1]][doorList[0][0]] == 5:
             if char.inventory['Keys'] == 0:
                 print("The door is locked. Looks like it needs some sort of key")
                 continue
@@ -81,7 +84,7 @@ while playing:
 
     if response == 'Go right':
         # check for boss room
-        if mapGen.fullMap[doorList[1][0]][doorList[1][1]] == 5:
+        if mapGen.fullMap[doorList[1][1]][doorList[1][0]] == 5:
             if char.inventory['Keys'] == 0:
                 print("The door is locked. Looks like it needs some sort of key")
                 continue
@@ -96,7 +99,7 @@ while playing:
 
     if response == 'Go back':
         # check for boss room
-        if mapGen.fullMap[doorList[2][0]][doorList[2][1]] == 5:
+        if mapGen.fullMap[doorList[2][1]][doorList[2][0]] == 5:
             if char.inventory['Keys'] == 0:
                 print("The door is locked. Looks like it needs some sort of key")
                 continue
@@ -111,7 +114,7 @@ while playing:
 
     if response == 'Go left':
         # check for boss room
-        if mapGen.fullMap[doorList[3][0]][doorList[3][1]] == 5:
+        if mapGen.fullMap[doorList[3][1]][doorList[3][0]] == 5:
             if char.inventory['Keys'] == 0:
                 print("The door is locked. Looks like it needs some sort of key")
                 continue
@@ -124,54 +127,31 @@ while playing:
         mapGen.userMap[currentRoom[1]][currentRoom[0]] = 'X'
         doorList = dirCho.doorAmount(mapGen.fullMap, currentRoom)
 
-    # Chest room functions
+    # CHEST ROOM FUNCTIONS
     if response == 'Open chest':
         chestFuncs.openChest(char.inventory, char.charStats)
         mapGen.fullMap[currentRoom[1]][currentRoom[0]] = 8
 
-    # Enemy combat functions
-    if response == 'Stab':
-        stabResults = enemyCombat.userStab(char.charStats['Health'], char.charStats['Attack'], enemyCombat.enemyStats['Health'], enemyCombat.enemyStats['Defence'])
-        if stabResults[0] <= 0:
-            print('You died, game over!')
-            sys.exit()
-        if stabResults[1] <= 0:
-            print('You killed the creature!')
-            enemyCombat.enemyDrop(char.inventory, mapGen.enemyCount)
-            mapGen.enemyCount -= 1
-            mapGen.fullMap[currentRoom[1]][currentRoom[0]] = 7
-            char.charStats['Health'] = stabResults[0]
-        else:
-            char.charStats['Health'] = stabResults[0]
-            enemyCombat.enemyStats['Health'] = stabResults[1]
-            print(f"Enemy Health: {enemyCombat.enemyStats['Health']}")
+    # ENEMY COMBAT FUNCTIONS
+    if response == 'Fight':
+        isFighting = True
+        while isFighting:
+            fightResult = enemyCombat.askMathsQuestion(char.charStats['Health'], enemyCombat.enemyStats['Health'])
+            if fightResult[0] <= 0:
+                print("You died, game over!")
+                sys.exit()
+            if fightResult[1] <= 0:
+                print("You killed the creature!")
+                enemyCombat.enemyDrop(char.inventory, mapGen.enemyCount)
+                mapGen.enemyCount -= 1
+                mapGen.fullMap[currentRoom[1]][currentRoom[0]] = 7
+                char.charStats['Health'] = fightResult[0]
+                isFighting = False
+            else:
+                char.charStats['Health'] = fightResult[0]
+                enemyCombat.enemyStats['Health'] = fightResult[1]
 
-    if response == 'Swipe':
-        swipeResults = enemyCombat.userSwipe(char.charStats['Health'], char.charStats['Attack'], enemyCombat.enemyStats['Health'], enemyCombat.enemyStats['Defence'])
-        if swipeResults[0] <= 0:
-            print('You died, game over!')
-            sys.exit()
-        if swipeResults[1] <= 0:
-            print('You killed the creature!')
-            enemyCombat.enemyDrop(char.inventory, mapGen.enemyCount)
-            mapGen.enemyCount -= 1
-            mapGen.fullMap[currentRoom[1]][currentRoom[0]] = 7
-            char.charStats['Health'] = swipeResults[0]
-        else:
-            char.charStats['Health'] = swipeResults[0]
-            enemyCombat.enemyStats['Health'] = swipeResults[1]
-            print(f"Enemy Health: {enemyCombat.enemyStats['Health']}")
-
-    if response == 'Block':
-        blockResults = enemyCombat.userBlock(char.charStats['Health'], char.charStats['Defence'], enemyCombat.enemyStats['Attack'])
-        if blockResults <= 0:
-            print('You died, game over!')
-            sys.exit()
-        else:
-            char.charStats['Health'] = blockResults
-            print(f"Enemy Health: {enemyCombat.enemyStats['Health']}")
-
-    # Default functions
+    # DEFAULT FUNCTIONS
     if response == 'Check stats':
         for k, v in char.charStats.items():
             print(f'{k}: {v}')
@@ -181,7 +161,7 @@ while playing:
             print(f'{k}: {v}')
 
     if response == 'Check map':
-        mapGen.printMap(mapGen.userMap)
+        #mapGen.printMap(mapGen.userMap)
         mapGen.printMap(mapGen.fullMap)
 
     if response == 'Quit':

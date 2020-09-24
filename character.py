@@ -5,6 +5,6 @@ charStats = {
 }
 
 inventory = {
-    'Gold Coins': 3,
+    'Gold Coins': 0,
     'Keys': 0,
 }

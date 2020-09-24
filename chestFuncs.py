@@ -3,7 +3,7 @@ import character as char
 
 def openChest(inv, stats):
     #List of items that can be found in a chest
-    possibleItems = ['Sword', 'Armour', 'Food', 'Gold Coins']
+    possibleItems = ['Food', 'Gold Coins']
 
     #pick random number for amount of item types
     itemAmount = random.randint(1, 2)
@@ -17,12 +17,6 @@ def openChest(inv, stats):
 
     #iterate through loot and add to stats or inventory
     for i in range(len(loot)):
-        if loot[i] == 'Sword':
-            char.charStats['Attack'] += 1
-            print('You find a sword! +1 Attack!')
-        if loot[i] == 'Armour':
-            char.charStats['Defence'] += 1
-            print('You find armour! +1 Defence!')
         if loot[i] == 'Food':
             char.charStats['Health'] += 1
             print('You find food! +1 Health')
