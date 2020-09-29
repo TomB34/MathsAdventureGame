@@ -1,5 +1,6 @@
 import pyinputplus as pyip
-import sys, time
+import sys
+import datetime
 
 import mapGenerator as mapGen
 import directionChoices as dirCho
@@ -66,7 +67,7 @@ while playing:
     response = pyip.inputMenu(choices=userChoices, numbered=True)
     print()
 
-    # Travel functions
+    # TRAVEL FUNCTIONS
     if response == 'Go forward':
         # check for boss room
         if mapGen.fullMap[doorList[0][1]][doorList[0][0]] == 5:
@@ -136,7 +137,9 @@ while playing:
     if response == 'Fight':
         isFighting = True
         while isFighting:
+
             fightResult = enemyCombat.askMathsQuestion(char.charStats['Health'], enemyCombat.enemyStats['Health'])
+
             if fightResult[0] <= 0:
                 print("You died, game over!")
                 sys.exit()
@@ -161,8 +164,8 @@ while playing:
             print(f'{k}: {v}')
 
     if response == 'Check map':
-        #mapGen.printMap(mapGen.userMap)
-        mapGen.printMap(mapGen.fullMap)
+        mapGen.printMap(mapGen.userMap)
+        #mapGen.printMap(mapGen.fullMap)
 
     if response == 'Quit':
         sys.exit()

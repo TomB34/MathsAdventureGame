@@ -67,8 +67,8 @@ userMap[coList[0][1]][coList[0][0]] = 'X'
 
 #Create array of random room types
 # 0 = empty coord, 1 = start room, 2 = empty room, 3 = enemy room, 4 = loot room, 5 = boss room
-roomTypeList = [3, 4]
-for x in range(random.randint(5, 7)):
+roomTypeList = [3, 4, 3]
+for x in range(random.randint(4, 6)):
     roomTypeList.append(random.randint(2, 4))
 
 enemyCount = 0

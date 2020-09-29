@@ -1,6 +1,6 @@
 import character as char
 import pyinputplus as pyip
-import random
+import random, time, datetime
 
 
 def initEnemy(enemyStatsDict):
@@ -14,17 +14,45 @@ def combatChoices(userchoices):
 def askMathsQuestion(userHealth, enemyHealth):
     x = random.randint(1, 10)
     y = random.randint(1, 10)
-    mathsPrompt = f"{x} x {y} = "
-    mathsResp = pyip.inputInt(prompt=mathsPrompt)
 
-    if mathsResp == x * y:
-        print("Correct! You deal the enemy 1 health point of damage!")
-        enemyHealth -= 1
-        print(f"Your Health: {userHealth}, Enemy's Health: {enemyHealth}\n")
+    qStart = datetime.datetime.now()
+    mathsQ = input(f"{x} x {y} = ")
+    qEnd = datetime.datetime.now()
+    qLenght = int(qEnd.strftime("%S")) - int(qStart.strftime("%S"))
+
+    # Outcomes if user's answer is correct
+    if mathsQ == str(x * y):
+        if qLenght <= 2:
+            print("Correct, a critical blow!")
+            print("You deal the enemy 2 health points of damage!")
+            enemyHealth -= 2
+            print(f"Your Health: {userHealth}, Enemy's Health: {enemyHealth}\n")
+            time.sleep(1)
+        elif qLenght <= 5:
+            print("Correct!")
+            print("You deal the enemy 1 health point of damage!")
+            enemyHealth -= 1
+            print(f"Your Health: {userHealth}, Enemy's Health: {enemyHealth}\n")
+            time.sleep(1)
+        elif qLenght > 5:
+            print("Correct, but the monster is too fast for your attack.")
+            print("You deal the enemy 0 health points worth of damage!")
+            print(f"Your Health: {userHealth}, Enemy's Health: {enemyHealth}\n")
+            time.sleep(1)
+
+    # Outcomes if user's answer is incorrect
     else:
-        print(f"Incorrect! The answer was {x * y}. You lose 1 health point")
-        userHealth -= 1
-        print(f"Your Health: {userHealth}, Enemy's Health: {enemyHealth}\n")
+        if qLenght <= 2:
+            print("You attack too quickly with an incorrect answer!")
+            print(f"The answer was {x * y}. You lose 2 health point")
+            userHealth -= 2
+            print(f"Your Health: {userHealth}, Enemy's Health: {enemyHealth}\n")
+            time.sleep(1)
+        else:
+            print(f"Incorrect! The answer was {x * y}. You lose 1 health point")
+            userHealth -= 1
+            print(f"Your Health: {userHealth}, Enemy's Health: {enemyHealth}\n")
+            time.sleep(1)
 
     return userHealth, enemyHealth
 
