@@ -1,6 +1,5 @@
 import pyinputplus as pyip
-import sys
-import datetime
+import sys, time
 
 import mapGenerator as mapGen
 import directionChoices as dirCho
@@ -30,8 +29,7 @@ while playing:
 
     # Prints a specific sentence when the game is started
     if isStart:
-        print(
-            "You wake up in a damp and dimly lit room. A single flickering candle throws up shadows on the four grey stone walls.")
+        print("You wake up in a damp and dimly lit room. A single flickering candle throws up shadows on the four grey stone walls.")
         isStart = False
         roomType = 1
     else:
@@ -39,6 +37,7 @@ while playing:
 
     # take current room and mapGen.fullMap. See what value fills current room and print appropriately
     userChoices = []
+    # Start room, empty rooms and emptied chest rooms
     if roomType == 1 or roomType == 2 or roomType == 8:
         userChoices = dirCho.doorChoices(doorList)
 
@@ -56,13 +55,11 @@ while playing:
         userChoices = dirCho.doorChoices(doorList)
         userChoices.append('Open chest')
     elif roomType == 5:
-        userChoices = dirCho.doorChoices(doorList)
+        enemyCombat.combatChoices(userChoices)
+        enemyCombat.initBoss(enemyCombat.bossStats)
+        print(f"Boss Health: {enemyCombat.bossStats['Health']}")
 
     defaultChoices(userChoices)
-
-    # prompt = 'What would you like to do?\n'
-    # for i in range(len(userChoices)):
-    #     prompt += f'{str(i + 1)}. {userChoices[i]}\n'
 
     response = pyip.inputMenu(choices=userChoices, numbered=True)
     print()
@@ -137,22 +134,36 @@ while playing:
     if response == 'Fight':
         isFighting = True
         while isFighting:
+            if roomType == 3:
+                fightResult = enemyCombat.askMathsQuestion(char.charStats['Health'], enemyCombat.enemyStats['Health'])
 
-            fightResult = enemyCombat.askMathsQuestion(char.charStats['Health'], enemyCombat.enemyStats['Health'])
+                if fightResult[0] <= 0:
+                    print("You died, game over!")
+                    sys.exit()
+                if fightResult[1] <= 0:
+                    print("You killed the creature!")
+                    enemyCombat.enemyDrop(char.inventory, mapGen.enemyCount)
+                    mapGen.enemyCount -= 1
+                    mapGen.fullMap[currentRoom[1]][currentRoom[0]] = 7
+                    char.charStats['Health'] = fightResult[0]
+                    isFighting = False
+                else:
+                    char.charStats['Health'] = fightResult[0]
+                    enemyCombat.enemyStats['Health'] = fightResult[1]
+            elif roomType == 5:
+                fightResult = enemyCombat.bossMathsQuestion(char.charStats['Health'], enemyCombat.bossStats['Health'])
 
-            if fightResult[0] <= 0:
-                print("You died, game over!")
-                sys.exit()
-            if fightResult[1] <= 0:
-                print("You killed the creature!")
-                enemyCombat.enemyDrop(char.inventory, mapGen.enemyCount)
-                mapGen.enemyCount -= 1
-                mapGen.fullMap[currentRoom[1]][currentRoom[0]] = 7
-                char.charStats['Health'] = fightResult[0]
-                isFighting = False
-            else:
-                char.charStats['Health'] = fightResult[0]
-                enemyCombat.enemyStats['Health'] = fightResult[1]
+                if fightResult[0] <= 0:
+                    print("You died, game over!")
+                    sys.exit()
+                if fightResult[1] <= 0:
+                    print("You defeated the final boss!")
+                    print("Congratulations, you won the game!")
+                    time.sleep(2)
+                    sys.exit()
+                else:
+                    char.charStats['Health'] = fightResult[0]
+                    enemyCombat.bossStats['Health'] = fightResult[1]
 
     # DEFAULT FUNCTIONS
     if response == 'Check stats':

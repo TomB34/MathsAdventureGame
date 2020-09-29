@@ -1,7 +1,5 @@
 charStats = {
-    'Health': 3,
-    'Attack': 1,
-    'Defence': 1
+    'Health': 3
 }
 
 inventory = {

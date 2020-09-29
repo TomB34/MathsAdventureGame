@@ -1,4 +1,4 @@
-import random, enemyCombat
+import random
 
 def roomDesc (currentRoom, fullMap):
     roomType = fullMap[currentRoom[1]][currentRoom[0]]
@@ -16,10 +16,9 @@ def roomDesc (currentRoom, fullMap):
         print("A slain foe lays in the middle of the room.")
     if roomType == 4:
         print("A chest sits in the middle of the room")
-        #Call loot function here
     if roomType == 5:
-        print("A huge three-eyed monster stands before you, looking a lot tougher and hungrier than the previous foes you have faced")
-        #Call boss function here
+        print("A huge three-eyed monster stands before you, looking a lot tougher than the previous foes you have faced")
+        print("You only way out is to to fight. Are you ready?")
     if roomType == 8:
         print("An opened and empty chest sits in the middle of the room")
 
