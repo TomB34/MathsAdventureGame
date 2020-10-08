@@ -38,6 +38,7 @@ def doorAmount(fullMap, currentRoom):
 
     return doors
 
+
 def doorChoices(doors):
     userChoices = []
     for i in range(4):
@@ -46,7 +47,7 @@ def doorChoices(doors):
         if doors[i] != None and i == 1:
             userChoices.append('Go right')
         if doors[i] != None and i == 2:
-            userChoices.append('Go back')
+            userChoices.append('Go backwards')
         if doors[i] != None and i == 3:
             userChoices.append('Go left')
     return userChoices

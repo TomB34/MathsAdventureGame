@@ -1,10 +1,9 @@
-import character as char
-import pyinputplus as pyip
 import random, time, datetime
 
 
 def initEnemy(enemyStatsDict):
     enemyStatsDict['Health'] = random.randint(3, 5)
+
 
 def initBoss(bossStatsDict):
     bossStatsDict['Health'] = random.randint(5, 7)
@@ -120,6 +119,7 @@ def bossMathsQuestion(userHealth, bossHealth):
             time.sleep(1)
 
     return userHealth, bossHealth
+
 
 enemyStats = {
     'Health': 0
