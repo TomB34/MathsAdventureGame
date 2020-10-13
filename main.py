@@ -32,7 +32,8 @@ while playing:
 
     # Prints a specific sentence when the game is started
     if isStart:
-        print("You wake up in a damp and dimly lit room. A single flickering candle throws up shadows on the four grey stone walls.")
+        print("You wake up in a damp and dimly lit room. A single flickering candle throws up shadows on the four "
+              "grey stone walls.")
         isStart = False
         roomType = 1
     else:
@@ -184,8 +185,9 @@ while playing:
             print(f'{k}: {v}')
 
     if response == 'Check map':
-        #mapGen.printMap(mapGen.userMap)
-        map.printMap(map.fullMap)
+        map.printMap(map.userMap)
+        # Uncomment to be able to view full map in game
+        # map.printMap(map.fullMap)
 
     if response == 'Quit':
         sys.exit()
