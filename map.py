@@ -80,6 +80,7 @@ def checkRoomSides(fullMapList, roomCoords):
     # Returns a list of empty rooms that are available to be used
 
 
+# Assigns room types in roomTypesList to random, connecting coordinates in map
 def createMap(roomTypesList, coList, fullMapList):
     for i in range(len(roomTypesList)):
         roomFound = False
@@ -102,6 +103,7 @@ def createMap(roomTypesList, coList, fullMapList):
                 fullMapList[coordsToFill[1]][coordsToFill[0]] = roomTypesList.pop()
 
 
+# Places boos room in the map, not adjacent to spawn
 def initBossRoom(coList, fullMapList):
     bossRoomFound = False
     while not bossRoomFound:
@@ -116,6 +118,90 @@ def initBossRoom(coList, fullMapList):
             coordsToFill = random.choice(emptyRooms)
             coordList.append(coordsToFill)
             fullMapList[coordsToFill[1]][coordsToFill[0]] = 5
+
+
+# Function for calculating the number of possible rooms to enter that surround a user
+def doorAmount(fullMapList, currentRoom):
+    doors = []
+    if currentRoom[1] == 0:
+        roomToCheck = [currentRoom[0], currentRoom[1] + 4]
+    else:
+        roomToCheck = [currentRoom[0], currentRoom[1] - 1]
+    if fullMapList[roomToCheck[1]][roomToCheck[0]] != 0:
+        doors.append(roomToCheck)
+    else:
+        doors.append(None)
+
+    if currentRoom[0] == 4:
+        roomToCheck = [currentRoom[0] - 4, currentRoom[1]]
+    else:
+        roomToCheck = [currentRoom[0] + 1, currentRoom[1]]
+    if fullMapList[roomToCheck[1]][roomToCheck[0]] != 0:
+        doors.append(roomToCheck)
+    else:
+        doors.append(None)
+
+    if currentRoom[1] == 4:
+        roomToCheck = [currentRoom[0], currentRoom[1] - 4]
+    else:
+        roomToCheck = [currentRoom[0], currentRoom[1] + 1]
+    if fullMapList[roomToCheck[1]][roomToCheck[0]] != 0:
+        doors.append(roomToCheck)
+    else:
+        doors.append(None)
+
+    if currentRoom[0] == 0:
+        roomToCheck = [currentRoom[0] + 4, currentRoom[1]]
+    else:
+        roomToCheck = [currentRoom[0] - 1, currentRoom[1]]
+    if fullMapList[roomToCheck[1]][roomToCheck[0]] != 0:
+        doors.append(roomToCheck)
+    else:
+        doors.append(None)
+
+    return doors
+
+
+# Function to list all available user options to user
+def doorChoices(doors):
+    userChoices = []
+    for i in range(4):
+        if doors[i] and i == 0:
+            userChoices.append('Go forward')
+        if doors[i] and i == 1:
+            userChoices.append('Go right')
+        if doors[i] and i == 2:
+            userChoices.append('Go backwards')
+        if doors[i] and i == 3:
+            userChoices.append('Go left')
+    return userChoices
+
+
+# Takes the current room and the fullMap to give an appropriate description based on the room type
+def roomDesc(currentRoom, fullMapList):
+    roomType = fullMapList[currentRoom[1]][currentRoom[0]]
+    if roomType == 1:
+        print("You find yourself in the room that you woke up in")
+    if roomType == 2:
+        emptyRoomLines = ["An empty room, not much to see here",
+                          "Not much to look at here",
+                          "Nothing exciting here"]
+        print(emptyRoomLines[random.randint(0, len(emptyRoomLines) - 1)])
+    if roomType == 3 or roomType == 6:
+        print(f"A creature stands before you, preventing you from getting out.")
+        print(f"The only way to escape is to fight. Are you ready?")
+    if roomType == 7:
+        print("A slain foe lays in the middle of the room.")
+    if roomType == 4:
+        print("A chest sits in the middle of the room")
+    if roomType == 5:
+        print(
+            "A huge three-eyed monster stands before you, looking a lot tougher than the previous foes you have faced")
+        print("You only way out is to to fight. Are you ready?")
+    if roomType == 8:
+        print("An opened and empty chest sits in the middle of the room")
+
+    return roomType
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -137,10 +223,3 @@ roomTypes, enemyCount = generateRooms()
 # Create a map made from random room types
 createMap(roomTypes, coordList, fullMap)
 initBossRoom(coordList, fullMap)
-
-
-
-
-
-
-

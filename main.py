@@ -1,10 +1,11 @@
 import pyinputplus as pyip
-import sys, time
+import sys
+import time
 
-import directionChoices as dirCho
-import roomDesc, enemyCombat
-
-import user, chest, map
+import enemyCombat
+import user
+import chest
+import map
 
 
 def defaultChoices(userChoicesList):
@@ -16,16 +17,15 @@ def defaultChoices(userChoicesList):
 
 # ------------------------------------------------------------------------------------------------
 
-# Init objects
+# Init user stats
 player = user.User()
 
 # Set Current room, full map and user map
 currentRoom = map.startRoom
 
 # List of possible directions to go in from current room
-doorList = dirCho.doorAmount(map.fullMap, currentRoom)
+doorList = map.doorAmount(map.fullMap, currentRoom)
 
-# List options for User
 playing = True
 isStart = True
 while playing:
@@ -36,34 +36,38 @@ while playing:
         isStart = False
         roomType = 1
     else:
-        roomType = roomDesc.roomDesc(currentRoom, map.fullMap)
+        roomType = map.roomDesc(currentRoom, map.fullMap)
 
-    # take current room and mapGen.fullMap. See what value fills current room and print appropriately
+    # USER CHOICES SECTION
     userChoices = []
     # Start room, empty rooms and emptied chest rooms
     if roomType == 1 or roomType == 2 or roomType == 8:
-        userChoices = dirCho.doorChoices(doorList)
-
-    elif roomType == 3:  # Enemy room upon first entry
+        userChoices = map.doorChoices(doorList)
+    # Enemy room upon first entry
+    elif roomType == 3:
         enemyCombat.combatChoices(userChoices)
         enemyCombat.initEnemy(enemyCombat.enemyStats)
         map.fullMap[currentRoom[1]][currentRoom[0]] = 6
         print(f"Enemy Health: {enemyCombat.enemyStats['Health']}")
-    elif roomType == 6:  # Enemy room after first entry
+    # Enemy room after first entry
+    elif roomType == 6:
         enemyCombat.combatChoices(userChoices)
         print(f"Enemy Health: {enemyCombat.enemyStats['Health']}")
-    elif roomType == 7:  # Defeated enemy room
-        userChoices = dirCho.doorChoices(doorList)
-    elif roomType == 4:  # Chest room
-        userChoices = dirCho.doorChoices(doorList)
+    # Defeated enemy room
+    elif roomType == 7:
+        userChoices = map.doorChoices(doorList)
+    # Chest room
+    elif roomType == 4:
+        userChoices = map.doorChoices(doorList)
         userChoices.append('Open chest')
+    # Boss room
     elif roomType == 5:
         enemyCombat.combatChoices(userChoices)
         enemyCombat.initBoss(enemyCombat.bossStats)
         print(f"Boss Health: {enemyCombat.bossStats['Health']}")
-
     defaultChoices(userChoices)
 
+    # USERS INPUT
     response = pyip.inputMenu(choices=userChoices, numbered=True)
     print()
 
@@ -81,7 +85,7 @@ while playing:
         map.userMap[currentRoom[1]][currentRoom[0]] = '-'
         currentRoom = [doorList[0][0], doorList[0][1]]
         map.userMap[currentRoom[1]][currentRoom[0]] = 'X'
-        doorList = dirCho.doorAmount(map.fullMap, currentRoom)
+        doorList = map.doorAmount(map.fullMap, currentRoom)
 
     if response == 'Go right':
         # check for boss room
@@ -96,7 +100,7 @@ while playing:
         map.userMap[currentRoom[1]][currentRoom[0]] = '-'
         currentRoom = [doorList[1][0], doorList[1][1]]
         map.userMap[currentRoom[1]][currentRoom[0]] = 'X'
-        doorList = dirCho.doorAmount(map.fullMap, currentRoom)
+        doorList = map.doorAmount(map.fullMap, currentRoom)
 
     if response == 'Go backwards':
         # check for boss room
@@ -111,7 +115,7 @@ while playing:
         map.userMap[currentRoom[1]][currentRoom[0]] = '-'
         currentRoom = [doorList[2][0], doorList[2][1]]
         map.userMap[currentRoom[1]][currentRoom[0]] = 'X'
-        doorList = dirCho.doorAmount(map.fullMap, currentRoom)
+        doorList = map.doorAmount(map.fullMap, currentRoom)
 
     if response == 'Go left':
         # check for boss room
@@ -126,7 +130,7 @@ while playing:
         map.userMap[currentRoom[1]][currentRoom[0]] = '-'
         currentRoom = [doorList[3][0], doorList[3][1]]
         map.userMap[currentRoom[1]][currentRoom[0]] = 'X'
-        doorList = dirCho.doorAmount(map.fullMap, currentRoom)
+        doorList = map.doorAmount(map.fullMap, currentRoom)
 
     # CHEST ROOM FUNCTIONS
     if response == 'Open chest':
