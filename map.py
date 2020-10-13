@@ -196,7 +196,7 @@ def roomDesc(currentRoom, fullMapList):
         print("A chest sits in the middle of the room")
     if roomType == 5:
         print(
-            "A huge three-eyed monster stands before you, looking a lot tougher than the previous foes you have faced")
+            "A huge three-eyed monster stands before you, looking a lot tougher than the previous foes you have faced.")
         print("You only way out is to to fight. Are you ready?")
     if roomType == 8:
         print("An opened and empty chest sits in the middle of the room")
